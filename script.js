@@ -1,7 +1,16 @@
+let token;
 
-
-
-
+fetch('./.gitignore/conf.json') // carica le variabili da conf.json
+    .then(response => {
+        if (!response.ok) {
+            console.log('Errore nel caricamento del file JSON');
+        }
+        return response.json();
+    })
+    .then(data => {
+        token = data.token;
+    })
+    .catch(error => console.error('Errore:', error));
 
 
 
@@ -36,8 +45,10 @@ function renderInserimento() {
 
 function addAddress(){
    const address = document.getElementById("address").value
+   let url = `https://us1.locationiq.com/v1/search?key=${token}&q=${encodeURIComponent(address)}&format=json`
+
    if (address){
-      fetch(`https://us1.locationiq.com/v1/search?key=pk.51de02ca59420a8535ff19bd59504a69&q=${encodeURIComponent(address)}&format=json`) //encodeURIComponent modifica la stringa in modo che possa essere utlizzata negli url replaceando alcuni valori che nelle url si scrivono diversamente (" " => %20)
+      fetch(url) //encodeURIComponent modifica la stringa in modo che possa essere utlizzata negli url replaceando alcuni valori che nelle url si scrivono diversamente (" " => %20)
          .then(r => r.json())
          .then(data => {
             if (data.length === 0) {
@@ -59,5 +70,4 @@ function addAddress(){
 
 
 renderInserimento();
- //pk.51de02ca59420a8535ff19bd59504a69 token di locationIq
  
